@@ -8,9 +8,9 @@ import Card from "../Card/Card";
 
 const Cards = () => {
   const { payload } = useContext(DataContextAPI)
-  const {currentTime, setCurrentTime} = useState([])
+  // const {currentTime, setCurrentTime} = useState([])
   const [data1, setData1] = useState(cardsData)
-  const [data2, setData2] = useState(cardsData)
+  // const [data2, setData2] = useState(cardsData)
   console.log("done: ", data1)
   // console.log("date: ", (new Date()).get())
   useEffect(() => {
@@ -33,7 +33,7 @@ const Cards = () => {
       }
     },1000)
     return () => clearInterval(timer)
-  })
+  },[payload])
   
 
   return (
