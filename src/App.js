@@ -1,7 +1,10 @@
 import './App.css'
+// import {useContext, useEffect} from 'react'
 import MainDash from './components/MainDash/MainDash';
 import RightSide from './components/RigtSide/RightSide';
 import Sidebar from './components/Sidebar';
+// import {DataContextAPI} from './context/dataContext';
+import { valueToPercent } from '@mui/base';
 
 function App() {
   return (

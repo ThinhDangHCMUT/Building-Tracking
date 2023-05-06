@@ -20,7 +20,7 @@
     #ffcfd1 51.55%,
     #f3c6f1 90.85%
   );
-  height: 100vh;
+  height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -35,7 +35,7 @@
   border-radius: 2rem;
   gap: 16px;
   grid-template-columns: 11rem auto 20rem;
-  overflow: hidden;
+  /* overflow: hidden; */
 }
 
 @media screen and (max-width: 1200px) {

@@ -7,7 +7,7 @@ const MainDash = () => {
     <div className="MainDash">
       <h1>Dashboard</h1>
       <Cards />
-      <Table />
+      {/* <Table /> */}
     </div>
   );
 };

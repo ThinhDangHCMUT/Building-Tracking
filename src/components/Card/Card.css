@@ -65,6 +65,7 @@
   height: 70vh;
   z-index: 9;
   left: 13rem;
+  top: 50%;
   border-radius: 1rem;
   display: flex;
   flex-direction: column;

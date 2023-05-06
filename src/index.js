@@ -1,9 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
+import { DataContext } from './context/dataContext'
 
 ReactDOM.render(
-    <App />,
+    <DataContext>
+      <App />
+    </DataContext>,
   document.getElementById('root')
 );
 
