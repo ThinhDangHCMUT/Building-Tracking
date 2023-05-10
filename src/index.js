@@ -1,15 +1,11 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import App from './App';
-import { DataContext } from './context/dataContext'
+import React from "react";
+import ReactDOM from "react-dom";
+import App from "./App";
+import { FloorContext } from "./context/floorContext";
 
 ReactDOM.render(
-    <DataContext>
+  <FloorContext>
       <App />
-    </DataContext>,
-  document.getElementById('root')
+  </FloorContext>,
+  document.getElementById("root")
 );
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals

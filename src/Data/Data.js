@@ -32,7 +32,8 @@ export const SidebarData = [
 // Analytics Cards Data
 export const cardsData = [
   {
-    title: "Nhiệt độ 1",
+    title: "Nhiệt độ",
+    type: "T",
     color: {
       backGround:
         "linear-gradient(rgb(248, 212, 154) -146.42%, rgb(255 202 113) -46.42%)",
@@ -50,7 +51,8 @@ export const cardsData = [
     ],
   },
   {
-    title: "Độ ẩm 1",
+    title: "Độ ẩm",
+    type: "H",
     color: {
       backGround:
         "linear-gradient(rgb(248, 212, 154) -146.42%, rgb(255 202 113) -46.42%)",
@@ -68,115 +70,8 @@ export const cardsData = [
     ],
   },
   {
-    title: "Nhiệt độ 2",
-    color: {
-      backGround:
-        "linear-gradient(rgb(248, 212, 154) -146.42%, rgb(255 202 113) -46.42%)",
-      boxShadow: "0px 10px 20px 0px #F9D59B",
-    },
-    barValue: 60,
-    value: "",
-    png: UilTemperature,
-    series: [
-      {
-        time: [],
-        name: "Nhiệt độ 2",
-        data: [10, 25, 15, 30, 12, 15, 20],
-      },
-    ],
-  },
-  {
-    title: "Độ ẩm 2",
-    color: {
-      backGround:
-        "linear-gradient(rgb(248, 212, 154) -146.42%, rgb(255 202 113) -46.42%)",
-      boxShadow: "0px 10px 20px 0px #F9D59B",
-    },
-    barValue: 60,
-    value: "",
-    png: UilTear,
-    series: [
-      {
-        time: [],
-        name: "Độ ẩm 2",
-        data: [10, 25, 15, 30, 12, 15, 20],
-      },
-    ],
-  },
-  {
-    title: "Nhiệt độ 3",
-    color: {
-      backGround:
-        "linear-gradient(rgb(248, 212, 154) -146.42%, rgb(255 202 113) -46.42%)",
-      boxShadow: "0px 10px 20px 0px #F9D59B",
-    },
-    barValue: 60,
-    value: "",
-    png: UilTemperature,
-    series: [
-      {
-        time: [],
-        name: "Nhiệt độ 3",
-        data: [10, 25, 15, 30, 12, 15, 20],
-      },
-    ],
-  },
-  {
-    title: "Độ ẩm 3",
-    color: {
-      backGround:
-        "linear-gradient(rgb(248, 212, 154) -146.42%, rgb(255 202 113) -46.42%)",
-      boxShadow: "0px 10px 20px 0px #F9D59B",
-    },
-    barValue: 60,
-    value: "",
-    png: UilTear,
-    series: [
-      {
-        time: [],
-        name: "Độ ẩm 3",
-        data: [10, 25, 15, 30, 12, 15, 20],
-      },
-    ],
-  },
-  {
-    title: "Nhiệt độ 4",
-    color: {
-      backGround:
-        "linear-gradient(rgb(248, 212, 154) -146.42%, rgb(255 202 113) -46.42%)",
-      boxShadow: "0px 10px 20px 0px #F9D59B",
-    },
-    barValue: 60,
-    value: "",
-    png: UilTemperature,
-    series: [
-      {
-        time: [],
-        name: "Nhiệt độ 4",
-        data: [10, 25, 15, 30, 12, 15, 20],
-      },
-    ],
-  },
-  {
-    title: "Độ ẩm 4",
-    color: {
-      backGround:
-        "linear-gradient(rgb(248, 212, 154) -146.42%, rgb(255 202 113) -46.42%)",
-      boxShadow: "0px 10px 20px 0px #F9D59B",
-    },
-    barValue: 60,
-    value: "",
-    png: UilTear,
-    series: [
-      {
-        time: [],
-        name: "Độ ẩm 4",
-        data: [10, 25, 15, 30, 12, 15, 20],
-      },
-    ],
-  },
-  {
     title: "Khí Gas",
+    type: "G",
     color: {
       backGround: "linear-gradient(180deg, #bb67ff 0%, #c484f3 100%)",
       boxShadow: "0px 10px 20px 0px #e0c6f5",
@@ -194,6 +89,7 @@ export const cardsData = [
   },
   {
     title: "Khói",
+    type: "S",
     color: {
       backGround: "linear-gradient(180deg, #FF919D 0%, #FC929D 100%)",
       boxShadow: "0px 10px 20px 0px #FDC0C7",

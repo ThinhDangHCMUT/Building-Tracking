@@ -10,38 +10,52 @@ export const DataContext = ({ children }) => {
     clientId: "thinhdang",
     clean: true,
     reconnectPeriod: 1000, // ms
-    connectTimeout: 30 * 1000, // ms
+    // connectTimeout: 30 * 1000, // ms
   };
   const topic = "building_data";
 
   const [client, setClient] = useState(null);
   const [payload, setPayload] = useState({});
-  const [connect, setConnect] = useState("connect")
+  const [connect, setConnect] = useState("connect");
+  // useEffect(() => {
+  //   setClient(mqtt.connect(brokerUrl, options));
+  // }, []);
+
   useEffect(() => {
-    setClient(mqtt.connect(brokerUrl, options));
+    const client = mqtt.connect(brokerUrl, options);
+    setClient(client);
+
+    client.on("connect", () => {
+      console.log("Connected to MQTT broker");
+      client.subscribe(topic, (error) => {
+        if (error) {
+          console.log("Subscribe to topics error", error);
+          return;
+        }
+        console.log(`Subscribed to topics: ${topic}`);
+      });
+    });
+
+    // client.on("message", (topic, message) => {
+    //   setPayload({ topic, message: message.toString() });
+    //   console.log(`Received message: ${message} from topic: ${topic}`);
+    // });
+
+    return () => {
+      console.log("Disconnecting from MQTT broker");
+      client.end();
+    };
   }, []);
 
   useEffect(() => {
     const Interval = setInterval(() => {
-      if (client) {
-        client.on("connect", () => {
-          // setConnect("okok")
-        //   console.log("Connection successfully!!!");
-        });
-        client.subscribe(topic, 0, (error) => {
-          if (error) {
-            console.log("Subscribe to topics error", error);
-            return;
-          }
-        //   console.log(`Subscribe to topics: ${topic}`);
-           client.on("message", (topic, message) => {
-            // const payload = { topic, message: message.toString() };
-            setPayload({ topic, message: message.toString() });
-            console.log(`received message: ${message} from topic: ${topic}`);
-          });
-        });
-      }
-    },1000);
+    if (client) {
+      client.on("message", (topic, message) => {
+        setPayload({ topic, message: message.toString() });
+        console.log(`received message: ${message} from topic: ${topic}`);
+      });
+    }
+    },2003);
 
     return () => clearInterval(Interval);
   });

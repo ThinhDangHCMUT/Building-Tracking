@@ -1,15 +1,22 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import "./Sidebar.css";
-import Logo from "../imgs/logo.png";
 import { UilSignOutAlt } from "@iconscout/react-unicons";
 import { SidebarData } from "../Data/Data";
 import { UilBars } from "@iconscout/react-unicons";
 import { motion } from "framer-motion";
+import { FloorContextAPI } from "../context/floorContext";
 
 const Sidebar = () => {
+  const {handleSetFloor} = useContext(FloorContextAPI)
+  // console.log(floor)
   const [selected, setSelected] = useState(0);
 
   const [expanded, setExpaned] = useState(true)
+
+  const handleSelect = (item ,index) => {
+    handleSetFloor(item)
+    setSelected(index)
+  }
 
   const sidebarVariants = {
     true: {
@@ -31,7 +38,6 @@ const Sidebar = () => {
     >
       {/* logo */}
       <div className="logo">
-        {/* <img src={Logo} alt="logo" /> */}
         <span>
           Building <br></br> Tracking
         </span>
@@ -43,14 +49,13 @@ const Sidebar = () => {
             <div
               className={selected === index ? "menuItem active" : "menuItem"}
               key={index}
-              onClick={() => setSelected(index)}
+              onClick={() => handleSelect(item.heading, index)}
             >
               <item.icon />
               <span>{item.heading}</span>
             </div>
           );
         })}
-        {/* signoutIcon */}
         <div className="menuItem">
           <UilSignOutAlt />
         </div>
