@@ -1,6 +1,6 @@
 import React, { useState, useContext } from "react";
 import "./Sidebar.css";
-import { UilSignOutAlt } from "@iconscout/react-unicons";
+import { UilSignOutAlt, UilBuilding } from "@iconscout/react-unicons";
 import { SidebarData } from "../Data/Data";
 import { UilBars } from "@iconscout/react-unicons";
 import { motion } from "framer-motion";
@@ -38,9 +38,8 @@ const Sidebar = () => {
     >
       {/* logo */}
       <div className="logo">
-        <span>
-          Building <br></br> Tracking
-        </span>
+          <UilBuilding size={50}/>
+          <span>Building Tracking</span>
       </div>
 
       <div className="menu">

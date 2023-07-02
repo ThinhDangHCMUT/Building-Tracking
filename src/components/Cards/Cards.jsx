@@ -58,7 +58,7 @@ const Cards = () => {
   useEffect(() => {
     const interval = setInterval(async () => {
       await axios
-        .get(`http://${IP_ADDRESS}:8000/api/value`, {
+        .get(`http://${IP_ADDRESS}:8000/sensor`, {
           headers: {
             "Content-Type": "application/json",
             Accept: "application/json",
