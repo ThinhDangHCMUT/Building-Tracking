@@ -2,14 +2,14 @@ import { createContext, useState } from "react"
 
 export const FloorContextAPI = createContext()
 
-export const FloorContext = ({children}) => {
+export const FloorContext = ({ children }) => {
     const [floor, setFloor] = useState("Floor 1")
 
     const handleSetFloor = (floor) => {
         setFloor(floor)
     }
 
-    return(
+    return (
         <FloorContextAPI.Provider
             value={{
                 floor,

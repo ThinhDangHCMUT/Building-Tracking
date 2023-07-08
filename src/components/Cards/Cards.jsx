@@ -1,150 +1,144 @@
 import React, { useContext, useState, useEffect } from "react";
 import "./Cards.css";
-import { cardsData } from "../../Data/Data";
+import { cardsData1, cardsData2, configData } from "../../Data/Data";
 import axios from "axios";
+import dayjs from "dayjs";
 // import { DataContextAPI } from "../../context/dataContext";
 import Card from "../Card/Card";
 import { FloorContextAPI } from "../../context/floorContext";
 
 const Cards = () => {
   const { floor } = useContext(FloorContextAPI);
-  // console.log(floor)
-  // const { payload } = useContext(DataContextAPI)
-  // console.log(payload)
-  const [data1, setData1] = useState(cardsData);
-  const [data2, setData2] = useState(cardsData);
+  const [config, setConfig] = useState(configData);
+  const [temp, setTemp] = useState([]);
+  const [t, setT] = useState({
+    F1: { T: [], H: [], G: [], S: [] },
+    F2: { T: [], H: [], G: [], S: [] },
+  });
+  const [data1, setData1] = useState(cardsData1);
+  const [data2, setData2] = useState(cardsData2);
 
-  console.log("Data from floor 1: ", data1);
-  console.log("Data from floor 2: ", data1);
-  const IP_ADDRESS = "localhost";
+  const IP_ADDRESS = "localhost:6969";
 
-  // useEffect(() => {
-  //   const timer = setInterval(()=> {
-  //     if(payload.message?.split(",")[0].split(":")[1] === '0'){
-  //       console.log(payload.message?.split(",")[1].split(":")[1])
-  //       setData1(data1.map((item,id) => {
-  //         return {
-  //           ...item,
-  //           value: payload.message?.split(",")[id+1].split(":")[1].includes('}') ? payload.message?.split(",")[id+1].split(":")[1].split("}")[0] : payload.message?.split(",")[id+1].split(":")[1],
-  //           series: [
-  //             {
-  //               ...item.series[0],
-  //               data: [...item.series[0].data, parseFloat(item.value) ],
-  //               time: [...item.series[0].time, new Date()]
-  //             }
-  //           ]
-  //         }
-  //       }))
-  //     } else if(payload.message?.split(",")[0].split(":")[1] === '1'){
-  //       console.log(payload.message?.split(",")[1].split(":")[1])
-  //       setData2(data2.map((item,id) => {
-  //         return {
-  //           ...item,
-  //           value: payload.message?.split(",")[id+1].split(":")[1].includes('}') ? payload.message?.split(",")[id+1].split(":")[1].split("}")[0] : payload.message?.split(",")[id+1].split(":")[1],
-  //           series: [
-  //             {
-  //               ...item.series[0],
-  //               data: [...item.series[0].data, parseFloat(item.value) ],
-  //               time: [...item.series[0].time, new Date()]
-  //             }
-  //           ]
-  //         }
-  //       }))
-  //     }
-  //   },1000)
-  //   return () => clearInterval(timer)
-  // })
+  const updateCard = (index, oldData, newData, setData, newValue) => {
+    const updateDatas = [...oldData];
+    updateDatas[index].series[0].data = newData;
+    updateDatas[index].value = newValue;
+    setData(updateDatas);
+  };
+
+  const buildWarningDataToMongo = (resp) => {
+    const datetime = dayjs();
+    if (parseFloat(resp["TEMP"]) >= 39 || parseFloat(resp["TEMP"]) <= 13) {
+      let data = {
+        name: resp["ID"] === 0 ? "Temperature 1" : "Temperature 2",
+        status: "warning",
+        value: resp["TEMP"],
+      };
+      axios.post(`http://${IP_ADDRESS}/sensor/data`, data);
+    }
+    if (parseFloat(resp["HUMI"]) < 30) {
+      let data = {
+        name: resp["ID"] === 0 ? "Humid 1" : "Humid 2",
+        status: "warning",
+        value: resp["HUMID"],
+      };
+      axios.post(`http://${IP_ADDRESS}/sensor/data`, data);
+    }
+    if (parseFloat(resp["GAS"]) > 40) {
+      let data = {
+        name: resp["ID"] === 0 ? "GAS 1" : "GAS 2",
+        status: "warning",
+        value: resp["GAS"],
+      };
+      axios.post(`http://${IP_ADDRESS}/sensor/data`, data);
+    }
+    if (parseFloat(resp["SMOKE"]) > 40) {
+      let data = {
+        name: resp["ID"] === 0 ? "SMOKE 1" : "SMOKE 2",
+        status: "warning",
+        value: resp["SMOKE"],
+      };
+      axios.post(`http://${IP_ADDRESS}/sensor/data`, data);
+    }
+  };
 
   useEffect(() => {
     const interval = setInterval(async () => {
       await axios
-        .get(`http://${IP_ADDRESS}:8000/sensor`, {
+        .get(`http://${IP_ADDRESS}/sensor`, {
           headers: {
             "Content-Type": "application/json",
             Accept: "application/json",
           },
         })
         .then((response) => {
-          console.log("Data from backend: ", response.data);
-          if (response.data["ID"] === 0) {
-            setData1(
-              data1.map((item, index) => {
-                if(item.type === "T"){
-                  return {
-                    ...item,
-                    value: response.data["TEMP"],
-                  };
-                }
-                if(item.type === "H"){
-                  return {
-                    ...item,
-                    value: response.data["HUMI"],
-                  };
-                } 
-                if(item.type === "G"){
-                  return {
-                    ...item,
-                    value: response.data["GAS"],
-                  };
-                }
-                if(item.type === "S"){
-                  return {
-                    ...item,
-                    value: response.data["SMOKE"],
-                  };
-                }
-              })
-            );
+          let resp = response.data?.data;
+          //Save data warning to mongoDB
+          buildWarningDataToMongo(resp);
+          setTemp(() => {
+            temp.push(response.data?.time);
+            return temp;
+          });
+
+          setT(() => {
+            if (resp["ID"] === 0) {
+              t.F1.T.push(resp.TEMP);
+              t.F1.H.push(resp.HUMI);
+              t.F1.G.push(resp.GAS);
+              t.F1.S.push(resp.SMOKE);
+            }
+            if (resp["ID"] === 1) {
+              t.F2.T.push(resp.TEMP);
+              t.F2.H.push(resp.HUMI);
+              t.F2.G.push(resp.GAS);
+              t.F2.S.push(resp.SMOKE);
+            }
+            return t;
+          });
+
+          setConfig((prevConfig) => ({
+            ...prevConfig,
+            options: {
+              ...prevConfig.options,
+              xaxis: {
+                ...prevConfig.options.xaxis,
+                categories: temp,
+              },
+            },
+          }));
+          if (resp["ID"] === 0) {
+            updateCard(0, data1, t.F1.T, setData1, resp["TEMP"]);
+            updateCard(1, data1, t.F1.H, setData1, resp["HUMI"]);
+            updateCard(2, data1, t.F1.G, setData1, resp["GAS"]);
+            updateCard(3, data1, t.F1.S, setData1, resp["SMOKE"]);
           }
-          if (response.data["ID"] === 1) {
-            setData2(
-              data2.map((item, index) => {
-                if(item.type === "T"){
-                  return {
-                    ...item,
-                    value: response.data["TEMP"],
-                  };
-                }
-                if(item.type === "H"){
-                  return {
-                    ...item,
-                    value: response.data["HUMI"],
-                  };
-                } 
-                if(item.type === "G"){
-                  return {
-                    ...item,
-                    value: response.data["GAS"],
-                  };
-                }
-                if(item.type === "S"){
-                  return {
-                    ...item,
-                    value: response.data["SMOKE"],
-                  };
-                }
-              })
-            );
+          if (resp["ID"] === 1) {
+            updateCard(0, data2, t.F2.T, setData2, resp["TEMP"]);
+            updateCard(1, data2, t.F2.H, setData2, resp["HUMI"]);
+            updateCard(2, data2, t.F2.G, setData2, resp["GAS"]);
+            updateCard(3, data2, t.F2.S, setData2, resp["SMOKE"]);
           }
         });
-    }, 1000);
+    }, 5000);
     return () => clearInterval(interval);
-  },[data1,data2]);
+  }, [config, temp, t, data1, data2]);
 
   return (
     <div className="Cards">
-      {floor == "Floor 1" &&
+      {floor === "Floor 1" &&
         data1.map((card, id) => {
           return (
             <div className="parentContainer" key={id}>
               <Card
                 title={card.title}
                 color={card.color}
-                barValue={card.barValue}
+                barValue={card.value}
                 value={card.value}
                 png={card.png}
                 series={card.series}
                 type={card.type}
+                config={config}
               />
             </div>
           );
@@ -161,6 +155,7 @@ const Cards = () => {
                 png={card.png}
                 series={card.series}
                 type={card.type}
+                config={config}
               />
             </div>
           );

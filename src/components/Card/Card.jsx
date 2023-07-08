@@ -6,13 +6,16 @@ import { UilTimes } from "@iconscout/react-unicons";
 import Chart from "react-apexcharts";
 import "./Card.css";
 
-
 const Card = (props) => {
   const [expanded, setExpanded] = useState(false);
   return (
     <AnimateSharedLayout>
       {expanded ? (
-        <ExpandedCard param={props} setExpanded={() => setExpanded(false)} />
+        <ExpandedCard
+          param={props}
+          config={props.config}
+          setExpanded={() => setExpanded(false)}
+        />
       ) : (
         <CompactCard param={props} setExpanded={() => setExpanded(true)} />
       )}
@@ -35,26 +38,15 @@ function CompactCard({ param, setExpanded }) {
       onClick={setExpanded}
     >
       <div className="radialBar">
-        <CircularProgressbar
-          value={param.barValue}
-          text={`${param.barValue}%`}
-        />
+        <CircularProgressbar value={param.value} />
         <span>{param.title}</span>
       </div>
       <div className="detail">
         <Png />
-        {
-          param?.type == "T" && (<span>{param.value}°C</span> )
-        }
-        {
-          param?.type == "H" && (<span>{param.value}%</span>) 
-        }
-        {
-          param?.type == "G" && (<span>{param.value}ppm</span> )
-        }
-        {
-          param?.type == "S" && (<span>{param.value}µm</span>)
-        }
+        {param?.type == "T" && <span>{param.value}°C</span>}
+        {param?.type == "H" && <span>{param.value}%</span>}
+        {param?.type == "G" && <span>{param.value}%</span>}
+        {param?.type == "S" && <span>{param.value}%</span>}
         <span>Live</span>
       </div>
     </motion.div>
@@ -62,50 +54,7 @@ function CompactCard({ param, setExpanded }) {
 }
 
 // Expanded Card
-function ExpandedCard({ param, setExpanded }) {
-  const data = {
-    options: {
-      chart: {
-        type: "area",
-        height: "auto",
-      },
-
-      dropShadow: {
-        enabled: false,
-        enabledOnSeries: undefined,
-        top: 0,
-        left: 0,
-        blur: 3,
-        color: "#000",
-        opacity: 0.35,
-      },
-
-      fill: {
-        colors: ["#fff"],
-        type: "gradient",
-      },
-      dataLabels: {
-        enabled: false,
-      },
-      stroke: {
-        curve: "smooth",
-        colors: ["white"],
-      },
-      tooltip: {
-        x: {
-          format: "mm:ss",
-        },
-      },
-      grid: {
-        show: true,
-      },
-      xaxis: {
-        type: "datetime",
-        categories: param.series[0].time
-      },
-    },
-  };
-
+function ExpandedCard({ param, setExpanded, config }) {
   return (
     <motion.div
       className="ExpandedCard"
@@ -118,9 +67,9 @@ function ExpandedCard({ param, setExpanded }) {
       <div style={{ alignSelf: "flex-end", cursor: "pointer", color: "white" }}>
         <UilTimes onClick={setExpanded} />
       </div>
-        <span>{param.title}</span>
+      <span>{param.title}</span>
       <div className="chartContainer">
-        <Chart options={data.options} series={param.series} type="area" />
+        <Chart options={config} series={param.series} type="area" />
       </div>
       <span>Live</span>
     </motion.div>

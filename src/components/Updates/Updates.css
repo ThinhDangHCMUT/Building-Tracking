@@ -1,5 +1,4 @@
-
-.Updates{
+.Updates {
     width: 85%;
     background: white;
     border-radius: 0.7rem;
@@ -8,18 +7,24 @@
     display: flex;
     flex-direction: column;
     font-size: 13px;
+    max-height: 100%;
 }
 
-.update{
+.update {
     display: flex;
     gap: 0.5rem;
 }
 
-.update>img{
+.updateContainer {
+    overflow-y: scroll;
+}
+
+
+.update>img {
     width: 3.2rem;
     height: 3.2rem;
 }
 
-.noti>div>span:nth-of-type(1){
+.noti>div>span:nth-of-type(1) {
     font-weight: bold;
 }
