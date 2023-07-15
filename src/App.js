@@ -8,9 +8,9 @@ function App() {
   return (
     <div className="App">
       <div className="AppGlass">
-        <Sidebar/>
-        <MainDash/>
-        <RightSide/>
+        <Sidebar />
+        <MainDash />
+        <RightSide />
       </div>
     </div>
   );

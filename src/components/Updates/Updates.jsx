@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
+import "./Updates.css";
 import dayjs from "dayjs";
 import axios from "axios";
 import _ from "lodash";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import "./Updates.css";
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 const IP_ADDRESS = "localhost:6969";
 
 const Updates = () => {
@@ -36,7 +36,7 @@ const Updates = () => {
     <div className="Updates">
       <div className="datepicker">
         <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <DesktopDatePicker
+          <DatePicker
             label="Dashboard Date"
             inputFormat="MM/DD/YYYY"
             value={dayValue}
